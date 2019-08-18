@@ -18,6 +18,7 @@ function random ()
   return math.ceil(math.random() * 100)
 end
 
+
 function copyTable (tbl)
   local copy = {}
 
@@ -26,6 +27,17 @@ function copyTable (tbl)
   end
 
   return copy
+end
+
+
+function tableContains (tbl, val)
+  for k,v in pairs(tbl) do
+    if v == val then
+      return true
+    end
+  end
+
+  return false
 end
 
 
@@ -75,14 +87,14 @@ end
 
 
 -- Attack power
-function attackPower (attacker, attWeapon, defender, defWeapon, isMagical)
-  local effBonus = attWeapon.eff == defender.trait and 1 or 2
+function attackPower (attacker, attWeapon, defender, defWeapon, isPhysical)
+  local effBonus = attWeapon.eff and attWeapon.eff == defender.trait and 2 or 1
 
   -- Weapon power
   local weaponPower = (attWeapon.mt + triangleBonus(attWeapon, defWeapon))*effBonus
 
   -- Attacker power
-  local attackerPower = isMagical and attacker.mag or attacker.str
+  local attackerPower = isPhysical and attacker.str or attacker.mag
 
   return attackerPower + weaponPower
 end
@@ -96,10 +108,12 @@ function damage (attacker, attWeapon, defender, defWeapon)
 
   local critical = isCritical(attacker, attWeapon, defender, defWeapon)
   local physicalWeapons = { 'sword', 'axe', 'lance', 'bow' }
-  local isMagical = not physicalWeapons[attWeapon.kind]
+  local isPhysical = tableContains(physicalWeapons, attWeapon.kind)
   local criticalBonus = critical and 3 or 1
-  local defense = isMagical and defender.res or defender.def
-  local attack = attackPower(attacker, attWeapon, defender, defWeapon, isMagical)
+  local defense = isPhysical and defender.def or defender.res
+  local attack = attackPower(attacker, attWeapon, defender, defWeapon, isPhysical)
+  
+  print('attack: ' .. attack .. '\tdefense: ' .. defense)
 
   return (attack - defense)*criticalBonus
 end

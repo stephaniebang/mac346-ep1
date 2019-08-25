@@ -2,12 +2,12 @@
 local CHARACTERS = {}
 
 -- Calculate character attack spped
-local function attackSpeed (character, weapon)
+local function attackSpeed(character, weapon)
   return character.spd - math.max(0, weapon.wt - character.str)
 end
 
 -- Check if table contains value
-local function tableContains (tbl, val)
+local function tableContainsValue(tbl, val)
   for _,v in pairs(tbl) do
     if v == val then
       return true
@@ -27,7 +27,7 @@ function CHARACTERS.init(characters, weapons)
 
     character.weapon = weapon
     character.attackSpeed = attackSpeed(character, weapon)
-    character.weapon.physical = tableContains(physicalWeapons, weapon.kind)
+    character.weapon.physical = tableContainsValue(physicalWeapons, weapon.kind)
   end
 
   return characters

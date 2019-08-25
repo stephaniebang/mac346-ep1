@@ -53,9 +53,9 @@ local function doubleAttack(attacker, defender, attack, counterAttack)
 end
 
 -- Run a battle round
-function ROUND.start(first, second)
+function ROUND.start(attackerCharacter, defenderCharacter)
   -- Prepare values
-  local attacker, defender = init(first, second)
+  local attacker, defender = init(attackerCharacter, defenderCharacter)
   local attack, counterAttack
 
   -- Attack
